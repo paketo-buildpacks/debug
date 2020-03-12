@@ -14,14 +14,33 @@
  * limitations under the License.
  */
 
-package main
+package debug
 
 import (
-	"github.com/paketo-buildpacks/debug/debug"
-	"github.com/paketo-buildpacks/libpak"
+	"os"
+
+	"github.com/buildpacks/libcnb"
 )
 
-func main() {
-	d := debug.Detect{}
-	libpak.Detect(d.Detect)
+type Detect struct{}
+
+func (d Detect) Detect(context libcnb.DetectContext) (libcnb.DetectResult, error) {
+	if _, ok := os.LookupEnv("BP_DEBUG_ENABLED"); !ok {
+		return libcnb.DetectResult{Pass: false}, nil
+	}
+
+	return libcnb.DetectResult{
+		Pass: true,
+		Plans: []libcnb.BuildPlan{
+			{
+				Provides: []libcnb.BuildPlanProvide{
+					{Name: "debug"},
+				},
+				Requires: []libcnb.BuildPlanRequire{
+					{Name: "debug"},
+					{Name: "jvm-application"},
+				},
+			},
+		},
+	}, nil
 }

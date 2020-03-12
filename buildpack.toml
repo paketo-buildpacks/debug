@@ -31,4 +31,5 @@ include-files = [
   "bin/build",
   "bin/detect",
   "buildpack.toml",
+  "eclipse.png",
 ]

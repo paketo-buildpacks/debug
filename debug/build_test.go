@@ -14,14 +14,40 @@
  * limitations under the License.
  */
 
-package main
+package debug_test
 
 import (
+	"testing"
+
+	"github.com/buildpacks/libcnb"
+	. "github.com/onsi/gomega"
 	"github.com/paketo-buildpacks/debug/debug"
-	"github.com/paketo-buildpacks/libpak"
+	"github.com/sclevine/spec"
 )
 
-func main() {
-	d := debug.Detect{}
-	libpak.Detect(d.Detect)
+func testBuild(t *testing.T, context spec.G, it spec.S) {
+	var (
+		Expect = NewWithT(t).Expect
+
+		build debug.Build
+		ctx   libcnb.BuildContext
+	)
+
+	it("does nothing without plan", func() {
+		Expect(build.Build(ctx)).To(Equal(BeZero()))
+	})
+
+	it("adds debug to the result", func() {
+		ctx.Plan = libcnb.BuildpackPlan{
+			Entries: []libcnb.BuildpackPlanEntry{
+				{Name: "debug"},
+			},
+		}
+
+		result, err := build.Build(ctx)
+		Expect(err).NotTo(HaveOccurred())
+
+		Expect(result.Layers).To(HaveLen(1))
+	})
+
 }

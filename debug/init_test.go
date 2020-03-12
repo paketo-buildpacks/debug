@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package main
+package debug_test
 
 import (
-	"github.com/paketo-buildpacks/debug/debug"
-	"github.com/paketo-buildpacks/libpak"
+	"testing"
+
+	"github.com/sclevine/spec"
+	"github.com/sclevine/spec/report"
 )
 
-func main() {
-	d := debug.Detect{}
-	libpak.Detect(d.Detect)
+func TestUnit(t *testing.T) {
+	suite := spec.New("procfile", spec.Report(report.Terminal{}))
+	suite("Build", testBuild)
+	suite("Detect", testDetect)
+	suite("Debug", testDebug)
+	suite.Run(t)
 }
