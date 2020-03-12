@@ -17,11 +17,11 @@
 package main
 
 import (
-	"github.com/buildpacks/libcnb"
 	"github.com/paketo-buildpacks/debug/debug"
+	"github.com/paketo-buildpacks/libpak"
 )
 
 func main() {
 	b := debug.NewBuild()
-	libcnb.Build(b.Build)
+	libpak.Build(b.Build)
 }
