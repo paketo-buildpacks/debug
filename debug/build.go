@@ -18,7 +18,6 @@ package debug
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/buildpacks/libcnb"
 	"github.com/paketo-buildpacks/libpak"
@@ -27,12 +26,6 @@ import (
 
 type Build struct {
 	Logger bard.Logger
-}
-
-func NewBuild() Build {
-	return Build{
-		Logger: bard.NewLogger(os.Stdout),
-	}
 }
 
 func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
@@ -47,7 +40,8 @@ func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 
 	b.Logger.Title(context.Buildpack)
 
-	return libcnb.BuildResult{
-		Layers: []libcnb.LayerContributor{NewDebug(context.Buildpack.Info)},
-	}, nil
+	d := NewDebug(context.Buildpack.Info)
+	d.Logger = b.Logger
+
+	return libcnb.BuildResult{Layers: []libcnb.LayerContributor{d}}, nil
 }

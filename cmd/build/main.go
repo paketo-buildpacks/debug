@@ -17,11 +17,13 @@
 package main
 
 import (
+	"os"
+
 	"github.com/paketo-buildpacks/debug/debug"
 	"github.com/paketo-buildpacks/libpak"
+	"github.com/paketo-buildpacks/libpak/bard"
 )
 
 func main() {
-	b := debug.NewBuild()
-	libpak.Build(b.Build)
+	libpak.Build(debug.Build{Logger: bard.NewLogger(os.Stdout)})
 }

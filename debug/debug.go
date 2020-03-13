@@ -17,8 +17,6 @@
 package debug
 
 import (
-	"os"
-
 	"github.com/buildpacks/libcnb"
 	"github.com/paketo-buildpacks/libpak"
 	"github.com/paketo-buildpacks/libpak/bard"
@@ -30,15 +28,14 @@ type Debug struct {
 }
 
 func NewDebug(info libcnb.BuildpackInfo) Debug {
-	return Debug{
-		LayerContributor: libpak.NewLayerContributor("Debug", info),
-		Logger:           bard.NewLogger(os.Stdout),
-	}
+	return Debug{LayerContributor: libpak.NewLayerContributor("Debug", info)}
 }
 
 func (d Debug) Contribute(layer libcnb.Layer) (libcnb.Layer, error) {
 	d.Logger.Body(bard.FormatUserConfig("BPL_DEBUG_PORT", "the port the JVM will listen on", "8000"))
 	d.Logger.Body(bard.FormatUserConfig("BPL_DEBUG_SUSPEND", "whether the JVM will suspend on startup", "n"))
+
+	d.LayerContributor.Logger = d.Logger
 
 	return d.LayerContributor.Contribute(layer, func() (libcnb.Layer, error) {
 		layer.Profile.Add("debug", `PORT=${BPL_DEBUG_PORT:=8000}

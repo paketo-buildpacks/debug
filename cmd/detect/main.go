@@ -22,6 +22,5 @@ import (
 )
 
 func main() {
-	d := debug.Detect{}
-	libpak.Detect(d.Detect)
+	libpak.Detect(debug.Detect{})
 }
