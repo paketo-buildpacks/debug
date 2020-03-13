@@ -33,7 +33,7 @@ func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 
 	_, ok, err := r.Resolve("debug")
 	if err != nil {
-		return libcnb.BuildResult{}, fmt.Errorf("unable to resolve buildpack plan entry debug: %w", err)
+		return libcnb.BuildResult{}, fmt.Errorf("unable to resolve buildpack plan entry debug\n%w", err)
 	} else if !ok {
 		return libcnb.BuildResult{}, nil
 	}
