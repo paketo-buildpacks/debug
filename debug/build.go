@@ -31,11 +31,10 @@ type Build struct {
 func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 	r := libpak.PlanEntryResolver{Plan: context.Plan}
 
-	_, ok, err := r.Resolve("debug")
-	if err != nil {
-		return libcnb.BuildResult{}, fmt.Errorf("unable to resolve buildpack plan entry debug\n%w", err)
-	} else if !ok {
+	if _, err := r.Resolve("debug"); libpak.IsNoValidEntry(err) {
 		return libcnb.BuildResult{}, nil
+	} else if err != nil {
+		return libcnb.BuildResult{}, fmt.Errorf("unable to resolve buildpack plan entry debug\n%w", err)
 	}
 
 	b.Logger.Title(context.Buildpack)
