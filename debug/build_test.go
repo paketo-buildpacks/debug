@@ -33,10 +33,6 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		ctx   libcnb.BuildContext
 	)
 
-	it("does nothing without plan", func() {
-		Expect(build.Build(ctx)).To(Equal(libcnb.BuildResult{}))
-	})
-
 	it("adds debug to the result", func() {
 		ctx.Plan = libcnb.BuildpackPlan{
 			Entries: []libcnb.BuildpackPlanEntry{
