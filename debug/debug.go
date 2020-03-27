@@ -17,9 +17,13 @@
 package debug
 
 import (
+	"fmt"
+
 	"github.com/buildpacks/libcnb"
+	_ "github.com/paketo-buildpacks/debug/debug/statik"
 	"github.com/paketo-buildpacks/libpak"
 	"github.com/paketo-buildpacks/libpak/bard"
+	"github.com/paketo-buildpacks/libpak/sherpa"
 )
 
 type Debug struct {
@@ -31,6 +35,8 @@ func NewDebug(info libcnb.BuildpackInfo) Debug {
 	return Debug{LayerContributor: libpak.NewLayerContributor("Debug", info)}
 }
 
+//go:generate statik -src . -include *.sh
+
 func (d Debug) Contribute(layer libcnb.Layer) (libcnb.Layer, error) {
 	d.Logger.Body(bard.FormatUserConfig("BPL_DEBUG_PORT", "the port the JVM will listen on", "8000"))
 	d.Logger.Body(bard.FormatUserConfig("BPL_DEBUG_SUSPEND", "whether the JVM will suspend on startup", "n"))
@@ -38,17 +44,12 @@ func (d Debug) Contribute(layer libcnb.Layer) (libcnb.Layer, error) {
 	d.LayerContributor.Logger = d.Logger
 
 	return d.LayerContributor.Contribute(layer, func() (libcnb.Layer, error) {
-		layer.Profile.Add("debug", `PORT=${BPL_DEBUG_PORT:=8000}
-SUSPEND=${BPL_DEBUG_SUSPEND:=n}
+		s, err := sherpa.StaticFile("/debug.sh")
+		if err != nil {
+			return libcnb.Layer{}, fmt.Errorf("unable to load debug.sh\n%w", err)
+		}
 
-printf "Debugging enabled on port %%s" "${PORT}"
-if [[ "${SUSPEND}" = "y" ]]; then
-  printf ", suspended on start"
-fi
-printf "\n"
-
-export JAVA_OPTS="${JAVA_OPTS} -agentlib:jdwp=transport=dt_socket,server=y,address=${PORT},suspend=${SUSPEND}"
-`)
+		layer.Profile.Add("debug.sh", s)
 
 		layer.Launch = true
 		return layer, nil
