@@ -38,9 +38,6 @@ func NewDebug(info libcnb.BuildpackInfo) Debug {
 //go:generate statik -src . -include *.sh
 
 func (d Debug) Contribute(layer libcnb.Layer) (libcnb.Layer, error) {
-	d.Logger.Body(bard.FormatUserConfig("BPL_DEBUG_PORT", "the port the JVM will listen on", "8000"))
-	d.Logger.Body(bard.FormatUserConfig("BPL_DEBUG_SUSPEND", "whether the JVM will suspend on startup", "n"))
-
 	d.LayerContributor.Logger = d.Logger
 
 	return d.LayerContributor.Contribute(layer, func() (libcnb.Layer, error) {
