@@ -58,8 +58,8 @@ func testDebug(t *testing.T, context spec.G, it spec.S) {
 		Expect(err).NotTo(HaveOccurred())
 
 		Expect(layer.Launch).To(BeTrue())
-		Expect(layer.Profile["debug.sh"]).To(Equal(`PORT=${BPL_DEBUG_PORT:=8000}
-SUSPEND=${BPL_DEBUG_SUSPEND:=n}
+		Expect(layer.Profile["debug.sh"]).To(Equal(`PORT="${BPL_DEBUG_PORT:=8000}"
+SUSPEND="${BPL_DEBUG_SUSPEND:=n}"
 
 printf "Debugging enabled on port %s" "${PORT}"
 if [[ "${SUSPEND}" = "y" ]]; then

@@ -1,5 +1,5 @@
-PORT=${BPL_DEBUG_PORT:=8000}
-SUSPEND=${BPL_DEBUG_SUSPEND:=n}
+PORT="${BPL_DEBUG_PORT:=8000}"
+SUSPEND="${BPL_DEBUG_SUSPEND:=n}"
 
 printf "Debugging enabled on port %s" "${PORT}"
 if [[ "${SUSPEND}" = "y" ]]; then
