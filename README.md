@@ -17,16 +17,17 @@ The buildpack will do the following:
 | `$BPL_DEBUG_PORT` | What port the debug agent will listen on. Defaults to `8000`.
 | `$BPL_DEBUG_SUSPEND` | Whether the JVM will suspend execution until a debugger has attached.  Defaults to `n`.
 
-## Creating SSH Tunnel
-After starting an application with debugging enabled, an SSH tunnel must be created to the container.  To create that SSH container, execute the following command:
+
+## Publishing the Port
+When starting an application with debugging enabled, a port must be published.  To publish the port in Docker, use the following command:
 
 ```bash
-$ cf ssh -N -T -L <LOCAL_PORT>:localhost:<REMOTE_PORT> <APPLICATION_NAME>
+$ docker run --publish <LOCAL_PORT>:<REMOTE_PORT> ...
 ```
 
 The `REMOTE_PORT` should match the `port` configuration for the application (`8000` by default).  The `LOCAL_PORT` can be any open port on your computer, but typically matches the `REMOTE_PORT` where possible.
 
-Once the SSH tunnel has been created, your IDE should connect to `localhost:<LOCAL_PORT>` for debugging.
+Once the port has been published, your IDE should connect to `localhost:<LOCAL_PORT>` for debugging.
 
 ![Eclipse Configuration](eclipse.png)
 
