@@ -2,7 +2,7 @@
 The Paketo Debug Buildpack is a Cloud Native Buildpack that configures debugging for JVM applications.
 
 ## Behavior
-This buildpack will participate if all of the following conditions are met
+This buildpack will participate if all the following conditions are met
 
 * `$BP_DEBUG_ENABLED` is set
 
