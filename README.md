@@ -1,4 +1,4 @@
-# `paketo-buildpacks/debug`
+# `gcr.io/paketo-buildpacks/debug`
 The Paketo Debug Buildpack is a Cloud Native Buildpack that configures debugging for JVM applications.
 
 ## Behavior
