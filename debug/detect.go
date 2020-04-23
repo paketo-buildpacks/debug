@@ -24,7 +24,7 @@ import (
 
 type Detect struct{}
 
-func (d Detect) Detect(context libcnb.DetectContext) (libcnb.DetectResult, error) {
+func (Detect) Detect(context libcnb.DetectContext) (libcnb.DetectResult, error) {
 	if _, ok := os.LookupEnv("BP_DEBUG_ENABLED"); !ok {
 		return libcnb.DetectResult{Pass: false}, nil
 	}
