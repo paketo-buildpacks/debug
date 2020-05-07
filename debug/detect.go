@@ -26,12 +26,12 @@ import (
 type Detect struct{}
 
 func (Detect) Detect(context libcnb.DetectContext) (libcnb.DetectResult, error) {
-	c, err := libpak.NewConfigurationResolver(context.Buildpack, nil)
+	cr, err := libpak.NewConfigurationResolver(context.Buildpack, nil)
 	if err != nil {
 		return libcnb.DetectResult{}, fmt.Errorf("unable to create configuration resolver\n%w", err)
 	}
 
-	if _, ok := c.Resolve("BP_DEBUG_ENABLED"); !ok {
+	if _, ok := cr.Resolve("BP_DEBUG_ENABLED"); !ok {
 		return libcnb.DetectResult{Pass: false}, nil
 	}
 
