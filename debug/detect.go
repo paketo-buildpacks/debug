@@ -17,15 +17,21 @@
 package debug
 
 import (
-	"os"
+	"fmt"
 
 	"github.com/buildpacks/libcnb"
+	"github.com/paketo-buildpacks/libpak"
 )
 
 type Detect struct{}
 
 func (Detect) Detect(context libcnb.DetectContext) (libcnb.DetectResult, error) {
-	if _, ok := os.LookupEnv("BP_DEBUG_ENABLED"); !ok {
+	c, err := libpak.NewConfigurationResolver(context.Buildpack, nil)
+	if err != nil {
+		return libcnb.DetectResult{}, fmt.Errorf("unable to create configuration resolver\n%w", err)
+	}
+
+	if _, ok := c.Resolve("BP_DEBUG_ENABLED"); !ok {
 		return libcnb.DetectResult{Pass: false}, nil
 	}
 

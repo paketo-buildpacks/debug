@@ -26,6 +26,20 @@ id = "io.buildpacks.stacks.bionic"
 [[stacks]]
 id = "org.cloudfoundry.stacks.cflinuxfs3"
 
+[[metadata.configurations]]
+name        = "BPL_DEBUG_PORT"
+description = "what port the debug agent will listen on"
+default     = "8080"
+
+[[metadata.configurations]]
+name        = "BPL_DEBUG_SUSPEND"
+description = "whether the JVM will suspend execution until a debugger has attached"
+default     = "n"
+
+[[metadata.configurations]]
+name        = "BP_DEBUG_ENABLED"
+description = "whether to contribute debug support"
+
 [metadata]
 pre-package   = "scripts/build.sh"
 include-files = [

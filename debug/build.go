@@ -17,7 +17,10 @@
 package debug
 
 import (
+	"fmt"
+
 	"github.com/buildpacks/libcnb"
+	"github.com/paketo-buildpacks/libpak"
 	"github.com/paketo-buildpacks/libpak/bard"
 )
 
@@ -27,8 +30,11 @@ type Build struct {
 
 func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 	b.Logger.Title(context.Buildpack)
-	b.Logger.Body(bard.FormatUserConfig("BPL_DEBUG_PORT", "the port the JVM will listen on", "8000"))
-	b.Logger.Body(bard.FormatUserConfig("BPL_DEBUG_SUSPEND", "whether the JVM will suspend on startup", "n"))
+
+	_, err := libpak.NewConfigurationResolver(context.Buildpack, &b.Logger)
+	if err != nil {
+		return libcnb.BuildResult{}, fmt.Errorf("unable to create configuration resolver\n%w", err)
+	}
 
 	result := libcnb.NewBuildResult()
 
