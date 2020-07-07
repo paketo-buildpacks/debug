@@ -20,10 +20,11 @@ import (
 	"fmt"
 
 	"github.com/buildpacks/libcnb"
-	_ "github.com/paketo-buildpacks/debug/debug/statik"
 	"github.com/paketo-buildpacks/libpak"
 	"github.com/paketo-buildpacks/libpak/bard"
 	"github.com/paketo-buildpacks/libpak/sherpa"
+
+	_ "github.com/paketo-buildpacks/debug/debug/statik"
 )
 
 type Debug struct {
