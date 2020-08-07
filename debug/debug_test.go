@@ -68,7 +68,7 @@ if [[ "${SUSPEND}" = "y" ]]; then
 fi
 printf "\n"
 
-export JAVA_OPTS="${JAVA_OPTS} -agentlib:jdwp=transport=dt_socket,server=y,address=${PORT},suspend=${SUSPEND}"
+export JAVA_TOOL_OPTIONS="${JAVA_TOOL_OPTIONS} -agentlib:jdwp=transport=dt_socket,server=y,address=${PORT},suspend=${SUSPEND}"
 `))
 	})
 }

@@ -8,7 +8,7 @@ This buildpack will participate if all the following conditions are met
 
 The buildpack will do the following:
 
-* Contribute debug configuration to `$JAVA_OPTS`
+* Contribute debug configuration to `$JAVA_TOOL_OPTIONS`
 
 ## Configuration
 | Environment Variable | Description
