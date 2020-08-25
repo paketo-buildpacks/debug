@@ -14,6 +14,7 @@ The buildpack will do the following:
 | Environment Variable | Description
 | -------------------- | -----------
 | `$BP_DEBUG_ENABLED` | Whether to contribute debug support
+| `$BPL_DEBUG_ENABLED` | Whether to enable debug support
 | `$BPL_DEBUG_PORT` | What port the debug agent will listen on. Defaults to `8000`.
 | `$BPL_DEBUG_SUSPEND` | Whether the JVM will suspend execution until a debugger has attached.  Defaults to `n`.
 
@@ -22,7 +23,7 @@ The buildpack will do the following:
 When starting an application with debugging enabled, a port must be published.  To publish the port in Docker, use the following command:
 
 ```bash
-$ docker run --publish <LOCAL_PORT>:<REMOTE_PORT> ...
+$ docker run --publish <LOCAL_PORT>:<REMOTE_PORT> --env BPL_DEBUG_ENABLED=true ...
 ```
 
 The `REMOTE_PORT` should match the `port` configuration for the application (`8000` by default).  The `LOCAL_PORT` can be any open port on your computer, but typically matches the `REMOTE_PORT` where possible.

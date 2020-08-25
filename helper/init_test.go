@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package debug_test
+package helper_test
 
 import (
 	"testing"
@@ -24,8 +24,7 @@ import (
 )
 
 func TestUnit(t *testing.T) {
-	suite := spec.New("debug", spec.Report(report.Terminal{}))
-	suite("Build", testBuild)
-	suite("Detect", testDetect)
+	suite := spec.New("helper", spec.Report(report.Terminal{}))
+	suite("Debug", testDebug)
 	suite.Run(t)
 }
