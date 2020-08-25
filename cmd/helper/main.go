@@ -14,32 +14,21 @@
  * limitations under the License.
  */
 
-package debug
+package main
 
 import (
-	"fmt"
+	"os"
 
-	"github.com/buildpacks/libcnb"
-	"github.com/paketo-buildpacks/libpak"
 	"github.com/paketo-buildpacks/libpak/bard"
+	"github.com/paketo-buildpacks/libpak/sherpa"
+
+	"github.com/paketo-buildpacks/debug/helper"
 )
 
-type Build struct {
-	Logger bard.Logger
-}
-
-func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
-	b.Logger.Title(context.Buildpack)
-	result := libcnb.NewBuildResult()
-
-	_, err := libpak.NewConfigurationResolver(context.Buildpack, &b.Logger)
-	if err != nil {
-		return libcnb.BuildResult{}, fmt.Errorf("unable to create configuration resolver\n%w", err)
-	}
-
-	h := libpak.NewHelperLayerContributor(context.Buildpack, result.Plan, "debug")
-	h.Logger = b.Logger
-	result.Layers = append(result.Layers, h)
-
-	return result, nil
+func main() {
+	sherpa.Execute(func() error {
+		return sherpa.Helpers(map[string]sherpa.ExecD{
+			"debug": helper.Debug{Logger: bard.NewLogger(os.Stdout)},
+		})
+	})
 }
