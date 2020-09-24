@@ -10,7 +10,7 @@ jobs:
             - uses: mheap/github-action-required-labels@v1
               with:
                 count: 1
-                labels: 'semver: major,semver: minor,semver: patch'
+                labels: semver:major, semver:minor, semver:patch
                 mode: exactly
     type:
         name: Minimal Type Labels
@@ -20,5 +20,5 @@ jobs:
             - uses: mheap/github-action-required-labels@v1
               with:
                 count: 1
-                labels: 'type: bug,type: dependency-upgrade,type: documentation,type: enhancement,type: question,type: task'
+                labels: type:bug, type:dependency-upgrade, type:documentation, type:enhancement, type:question, type:task
                 mode: exactly
