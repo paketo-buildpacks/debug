@@ -1,22 +1,22 @@
 template: $CHANGES
-name-template: v$RESOLVED_VERSION
+name-template: $RESOLVED_VERSION
 tag-template: v$RESOLVED_VERSION
 categories:
     - title: ⭐️ Enhancements
       labels:
-        - 'type: enhancement'
+        - type:enhancement
     - title: "\U0001F41E Bug Fixes"
       labels:
-        - 'type: bug'
+        - type:bug
     - title: "\U0001F4D4 Documentation"
       labels:
-        - 'type: documentation'
+        - type:documentation
     - title: ⛏ Dependency Upgrades
       labels:
-        - 'type: dependency-upgrade'
+        - type:dependency-upgrade
     - title: "\U0001F6A7 Tasks"
       labels:
-        - 'type: task'
+        - type:task
 exclude-labels:
     - 'type: question'
 version-resolver:
