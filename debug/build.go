@@ -37,9 +37,10 @@ func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 		return libcnb.BuildResult{}, fmt.Errorf("unable to create configuration resolver\n%w", err)
 	}
 
-	h := libpak.NewHelperLayerContributor(context.Buildpack, result.Plan, "debug")
+	h, be := libpak.NewHelperLayer(context.Buildpack, "debug")
 	h.Logger = b.Logger
 	result.Layers = append(result.Layers, h)
+	result.BOM.Entries = append(result.BOM.Entries, be)
 
 	return result, nil
 }
