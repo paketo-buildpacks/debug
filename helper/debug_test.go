@@ -17,7 +17,9 @@
 package helper_test
 
 import (
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"testing"
 
 	. "github.com/onsi/gomega"
@@ -29,8 +31,7 @@ import (
 func testDebug(t *testing.T, context spec.G, it spec.S) {
 	var (
 		Expect = NewWithT(t).Expect
-
-		d = helper.Debug{}
+		d      = helper.Debug{}
 	)
 
 	it("returns if $BPL_DEBUG_ENABLED is not set", func() {
@@ -40,6 +41,15 @@ func testDebug(t *testing.T, context spec.G, it spec.S) {
 	context("$BPL_DEBUG_ENABLED", func() {
 		it.Before(func() {
 			Expect(os.Setenv("BPL_DEBUG_ENABLED", "")).To(Succeed())
+
+			var err error
+			tempDir, err := ioutil.TempDir("", "home")
+
+			Expect(os.MkdirAll(tempDir, 0755)).To(Succeed())
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(ioutil.WriteFile(filepath.Join(tempDir, "release"), []byte("JAVA_VERSION=\"1.8.0\""), 0755)).To(Succeed())
+			Expect(os.Setenv("JAVA_HOME", filepath.Join(tempDir))).To(Succeed())
 		})
 
 		it.After(func() {
@@ -96,6 +106,25 @@ func testDebug(t *testing.T, context spec.G, it spec.S) {
 			it("contributes configuration appended to existing $JAVA_TOOL_OPTIONS", func() {
 				Expect(d.Execute()).To(Equal(map[string]string{
 					"JAVA_TOOL_OPTIONS": "test-java-tool-options -agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=n",
+				}))
+			})
+		})
+
+		context("After Java 8", func() {
+			it.Before(func() {
+				home := os.Getenv("JAVA_HOME")
+				Expect(ioutil.WriteFile(filepath.Join(home, "release"), []byte("JAVA_VERSION=\"11.0.0\""), 0755)).To(Succeed())
+				Expect(os.Setenv("JAVA_HOME", filepath.Join(home))).To(Succeed())
+			})
+
+			it.After(func() {
+				Expect(os.Unsetenv("JAVA_TOOL_OPTIONS")).To(Succeed())
+			})
+
+			it("contributes configuration appended to existing $JAVA_TOOL_OPTIONS for Java versions 9+", func() {
+
+				Expect(d.Execute()).To(Equal(map[string]string{
+					"JAVA_TOOL_OPTIONS": "-agentlib:jdwp=transport=dt_socket,server=y,address=*:8000,suspend=n",
 				}))
 			})
 		})
