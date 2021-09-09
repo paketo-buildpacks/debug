@@ -17,8 +17,11 @@
 package helper
 
 import (
+	"bytes"
 	"fmt"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -36,10 +39,7 @@ func (d Debug) Execute() (map[string]string, error) {
 
 	var err error
 
-	port := "8000"
-	if s, ok := os.LookupEnv("BPL_DEBUG_PORT"); ok {
-		port = s
-	}
+	port, err := lookupPort()
 
 	suspend := false
 	if s, ok := os.LookupEnv("BPL_DEBUG_SUSPEND"); ok {
@@ -70,4 +70,34 @@ func (d Debug) Execute() (map[string]string, error) {
 		fmt.Sprintf("-agentlib:jdwp=transport=dt_socket,server=y,address=%s,suspend=%s", port, s))
 
 	return map[string]string{"JAVA_TOOL_OPTIONS": strings.Join(values, " ")}, nil
+}
+
+func lookupPort() (string, error) {
+	port := "8000"
+	if s, ok := os.LookupEnv("BPL_DEBUG_PORT"); ok {
+		port = s
+	}
+
+	if home, ok := os.LookupEnv("JAVA_HOME"); ok {
+		contents, err := ioutil.ReadFile(filepath.Join(home, "/release"))
+		if err != nil {
+			return "", fmt.Errorf("unable to read release file\n%w", err)
+		}
+
+		s := bytes.Split(bytes.TrimSpace(contents), []byte("\n"))
+		var version []byte
+		for _, prop := range s { // find version property value
+			if bytes.Contains(prop, []byte("JAVA_VERSION")) {
+				version = bytes.Split(prop, []byte("="))[1]
+				break
+			}
+		}
+
+		// Changed in Java 9+, must specify address like *:port
+		if len(version) > 0 && !bytes.HasPrefix(version, []byte(`"1.8`)) {
+			port = "*:" + port
+		}
+	}
+
+	return port, nil
 }
