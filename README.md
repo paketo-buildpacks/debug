@@ -1,4 +1,7 @@
 # `gcr.io/paketo-buildpacks/debug`
+
+**This buildpack will soon be archived, remote debugging functionality is now available at build time by default and can be enabled with the runtime variable `$BPL_DEBUG_ENABLED`. See [here](https://paketo.io/docs/howto/java/#enable-remote-debugging) for more information.**
+
 The Paketo Debug Buildpack is a Cloud Native Buildpack that configures debugging for JVM applications.
 
 ## Behavior
